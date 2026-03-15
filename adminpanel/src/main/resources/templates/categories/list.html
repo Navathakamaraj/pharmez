@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Category List</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; padding: 40px; }
+        .container { max-width: 1000px; margin: auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #1e293b; color: white; padding: 12px; text-align: left; }
+        td { padding: 12px; border-bottom: 1px solid #e2e8f0; }
+        .status-badge { padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; }
+        .active { background: #dcfce7; color: #166534; }
+        .inactive { background: #fee2e2; color: #991b1b; }
+        .btn-add { background: #3b82f6; color: white; padding: 8px 16px; text-decoration: none; border-radius: 6px; }
+        .btn-edit { color: #3b82f6; text-decoration: none; font-weight: bold; margin-right: 10px; }
+        .btn-delete { color: #ef4444; text-decoration: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Categories</h1>
+            <a href="/categories/form" class="btn-add">+ Add Category</a>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Status</th>
+                    <th>Modified Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="c : ${categories}">
+                    <td th:text="${c.category_id}"></td>
+                    <td th:text="${c.category_name}" style="font-weight: 600;"></td>
+                    <td>
+                        <span th:text="${c.category_status}" 
+                              th:classappend="${c.category_status == 'Active' ? 'status-badge active' : 'status-badge inactive'}">
+                        </span>
+                    </td>
+                    <td th:text="${c.modify_date != null ? #temporals.format(c.modify_date, 'dd-MMM-yyyy HH:mm') : 'New'}"></td>
+                    <td>
+                        <a th:href="@{/categories/edit/{id}(id=${c.category_id})}" class="btn-edit">Edit</a>
+                        
+                        <a th:href="@{/categories/delete/{id}(id=${c.category_id})}" 
+                           class="btn-delete" 
+                           onclick="return confirm('Warning: Deleting this category will also delete all products inside it. Continue?')">
+                           Delete
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <p><a href="/" style="text-decoration:none; color:#64748b; margin-top: 20px; display: inline-block;">← Dashboard</a></p>
+    </div>
+</body>
+</html>
